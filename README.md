@@ -10,3 +10,9 @@ Chaque ligne du fichier représente un morceau unique avec les attributs suivant
 - **Artiste**
 - **Album**
 - **Popularité**
+
+Voici le modèle de la base de données :
+
+Un artiste peut avoir un ou plusieurs albums et appartenir à plusieurs genres.
+Un titre peut appartenir à plusieurs albums et un album peut avoir plusieurs titres.
+![alt text](modele.png)
