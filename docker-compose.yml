@@ -3,21 +3,38 @@ services:
     image: postgres:16-alpine
     container_name: spotify_db
     environment:
-      - POSTGRES_USER=spotify_user
-      - POSTGRES_PASSWORD=spotify_pwd
-      - POSTGRES_DB=spotify_db
+      POSTGRES_USER: spotify_user
+      POSTGRES_PASSWORD: spotify_pwd
+      POSTGRES_DB: spotify_db
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U spotify_user -d spotify_user"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
+      - ./sql/full_init.sql:/docker-entrypoint-initdb.d/full_init.sql
+      - ./sql/spotify_data_clean_fixed.csv:/docker-entrypoint-initdb.d/spotify_data_clean_fixed.csv
+
     networks:
       - spotify_network
+    restart: unless-stopped
+
+  api:
+    build: ./app
+    container_name: spotify_api
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: spotify_db
+      DB_USER: spotify_user
+      DB_PASSWORD: spotify_pwd
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - spotify_network
+    restart: always
 
 volumes:
   pgdata:
@@ -25,4 +42,3 @@ volumes:
 networks:
   spotify_network:
     driver: bridge
-    name: spotify_network
