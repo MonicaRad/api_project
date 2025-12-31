@@ -3,7 +3,7 @@ from database import execute_query
 
 router = APIRouter(prefix="/logs", tags=["logs"])
 
-# Cette route retourne l historique des modifications effectuées sur les pistes
+# Cette route retourne l'historique des modifications effectuées sur les pistes
 @router.get(
     "/",
     responses={
