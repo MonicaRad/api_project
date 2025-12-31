@@ -15,7 +15,7 @@ def get_all_tracks():
     return execute_query("SELECT * FROM track ORDER BY track_id;")
 
 
-# Cette route retourne les informations d une piste via la fonction get_track_by_id
+# Cette route retourne les informations d'une piste via la fonction get_track_by_id
 @router.get(
     "/{track_id}",
     responses={
